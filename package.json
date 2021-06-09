@@ -1,7 +1,7 @@
 {
   "name": "graph-sql-2",
   "version": "1.0.0",
-  "description": "",
+  "description": "#Schema folder: Khai bao kieu : Root type... #Ket noi: Thay type thi ket noi",
   "main": "server/index.js",
   "scripts": {
     "start": "nodemon server/index.js",

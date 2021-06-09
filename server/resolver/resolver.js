@@ -1,38 +1,46 @@
 const books = require('../data/books')
 const authors = require('../data/authors')
 
+const Author = require('../models/Author')
+const Book = require('../models/Book')
+
 const resolvers = {
   //QUERY
   Query: {
-    books: () => books,
-    book: (parent, args) => {
-      //Warning... if dont' return, data will return null in
-      console.log(parent)
-      return books.find(book => {
-          return book.id == args.id
-        }
-      )
+    books: async (parent, args, { mongoDataMethods }) => {
+      return await mongoDataMethods.getAllBook()
     },
-    authors: () => authors,
-    author: (parent, args) => {
-      return authors.find(author => author.id == args.id)
+    book: async (parent, { id }, { mongoDataMethods }) => { //id <=> args.id
+      return await mongoDataMethods.getBookById(id)
+    },
+    authors: async (parent, args, { mongoDataMethods }) =>{
+      return await mongoDataMethods.getAllAuthor()
+    },
+    author: async (parent, { id }, { mongoDataMethods }) => {
+      return await mongoDataMethods.getAuthorById(id)
     }
   },
   Book:{
-    author: (parent, args) => authors.find(author => author.id == parent.authorId)
+    author: async (parent, args, { mongoDataMethods }) => {
+      return await mongoDataMethods.getAuthorById(authorId)
+    }
   },
   Author:{
-    books: (parent, args) => {
-      return books(book => {
-        return books.filter(book => book.authorId == parent.id)
-      })
+    books: async (parent, args, { mongoDataMethods }) => {
+     return await mongoDataMethods.getBookById({authorId: id})
     }
   },
 
   //MUTATION
   Mutation: {
-    createAuthor: (parent, args) => args,
-    createBook: (parent, args) => args
+    createAuthor: async (parent, args, { mongoDataMethods }) => {
+      // console.log(parent)
+      return await mongoDataMethods.createAuthor(args)
+    },
+    createBook: async (parent, args, { mongoDataMethods }) => {
+      // console.log(true,args)
+      return await mongoDataMethods.createBook(args)
+    }
   }
 }
 
